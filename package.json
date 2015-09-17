@@ -4,7 +4,7 @@
   "scripts": {
     "build-prepare": "rm -rf dist && mkdir dist",
     "build-tasks": "./node_modules/.bin/browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js",
-    "build": "npm run build-prepare && npm run build-tasks",
+    "build": "npm run build-prepare && npm run build-tasks"
   },
   "devDependencies": {
     "browserify": "^11.1.0",

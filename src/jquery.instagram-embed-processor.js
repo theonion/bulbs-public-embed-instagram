@@ -70,5 +70,3 @@ var createInstagramEmbedProcessor = function (options) {
 };
 
 $.fn.instagramEmbedProcessor = createInstagramEmbedProcessor;
-
-exports = InstagramEmbedProcessor;
