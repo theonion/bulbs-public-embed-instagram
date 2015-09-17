@@ -1,0 +1,19 @@
+{
+  "name": "instagram-embed-processor",
+  "version": "0.0.1",
+  "private": true,
+  "main": [
+    "dist/jquery.instagram-embed-processor.js"
+  ],
+  "ignore": [
+    ".gitignore",
+    "example",
+    "src",
+    "testing",
+    "README.md"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  },
+  "devDependencies": {}
+}

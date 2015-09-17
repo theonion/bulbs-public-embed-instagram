@@ -1,0 +1,74 @@
+var InstagramEmbedProcessor = function ($element) {
+  this.$container = $element;
+  this.$container.data('pluginInstagramEmbedProcessor', this);
+};
+
+// store deferred for getting instagram object
+InstagramEmbedProcessor.prototype.shared = {instagramLoaded: null};
+
+InstagramEmbedProcessor.prototype.sanitizeHtml = function (html) {
+  return $(html).not('script').prop('outerHTML');
+};
+
+InstagramEmbedProcessor.prototype.getVersion = function () {
+  return '1.0.0';
+};
+
+InstagramEmbedProcessor.prototype.isRendered = function (val) {
+  return this.$container.attr('instagram-embed-rendered') === true;
+};
+
+InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
+  var sanitized = this.sanitizeHtml(embedHtml);
+  this.$container.attr('instagram-processor-version', this.getVersion());
+  this.$container.attr('instagram-embed-html', escape(sanitized));
+};
+
+InstagramEmbedProcessor.prototype.render = function () {
+
+  if (!this.isRendered()) {
+
+    if (!this.shared.instagramLoaded || this.shared.instagramLoaded.state() === 'rejected') {
+
+      this.shared.instagramLoaded = $.Deferred();
+
+      var self = this;
+      $.getScript(INSTAGRAM_SCRIPT_URL)
+        .done(function () {
+          self.shared.instagramLoaded.resolve();
+        })
+        .fail(function () {
+          self.shared.instagramLoaded.reject(arguments);
+          console.error('Unable to load instagram embed script!', arguments);
+        });
+    }
+
+    this.shared.instagramLoaded.done(function () {
+      var code = this.attr('instagram-embed-html');
+      this.html(unescape(code));
+      instgrm.Embeds.process();
+      this.attr('instagram-embed-rendered', true);
+    }.bind(this.$container));
+  }
+
+};
+
+InstagramEmbedProcessor.prototype.clear = function () {
+  this.$container.empty();
+  this.$container.attr('instagram-embed-rendered', true);
+};
+
+var createInstagramEmbedProcessor = function (options) {
+  this.each(function () {
+    var $this = $(this);
+    if (!$this.data('pluginInstagramEmbedProcessor')) {
+      $this.data('pluginInstagramEmbedProcessor', new InstagramEmbedProcessor($this, options));
+    }
+  });
+
+  return this;
+};
+
+$.fn.instagramEmbedProcessor = createInstagramEmbedProcessor;
+
+exports = InstagramEmbedProcessor;
