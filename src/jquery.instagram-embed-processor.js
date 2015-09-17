@@ -1,10 +1,32 @@
-var InstagramEmbedProcessor = function ($element) {
+var InstagramEmbedProcessor = function ($element, options) {
+  this._settings = $.extend({
+    instagramEmbedScriptUrl: '//platform.instagram.com/en_US/embeds.js'
+  }, options);
   this.$container = $element;
   this.$container.data('pluginInstagramEmbedProcessor', this);
 };
 
 // store deferred for getting instagram object
 InstagramEmbedProcessor.prototype.shared = {instagramLoaded: null};
+
+InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
+  if (!this.shared.instagramLoaded || this.shared.instagramLoaded.state() === 'rejected') {
+
+    this.shared.instagramLoaded = $.Deferred();
+
+    var self = this;
+    $.getScript(this._settings)
+      .done(function () {
+        self.shared.instagramLoaded.resolve();
+      })
+      .fail(function () {
+        self.shared.instagramLoaded.reject(arguments);
+        console.error('Unable to load instagram embed script!', arguments);
+      });
+  }
+
+  return this.shared.instagramLoaded;
+};
 
 InstagramEmbedProcessor.prototype.sanitizeHtml = function (html) {
   return $(html).not('script').prop('outerHTML');
@@ -27,23 +49,7 @@ InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
 InstagramEmbedProcessor.prototype.render = function () {
 
   if (!this.isRendered()) {
-
-    if (!this.shared.instagramLoaded || this.shared.instagramLoaded.state() === 'rejected') {
-
-      this.shared.instagramLoaded = $.Deferred();
-
-      var self = this;
-      $.getScript(INSTAGRAM_SCRIPT_URL)
-        .done(function () {
-          self.shared.instagramLoaded.resolve();
-        })
-        .fail(function () {
-          self.shared.instagramLoaded.reject(arguments);
-          console.error('Unable to load instagram embed script!', arguments);
-        });
-    }
-
-    this.shared.instagramLoaded.done(function () {
+    this._getInstagramEmbedScript().done(function () {
       var code = this.attr('instagram-embed-html');
       this.html(unescape(code));
       instgrm.Embeds.process();
