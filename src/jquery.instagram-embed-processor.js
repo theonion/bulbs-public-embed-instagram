@@ -30,7 +30,15 @@ InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
   return this._shared.instagramLoaded.promise();
 };
 
-InstagramEmbedProcessor.prototype._sanitizeHtml = function (html) {
+InstagramEmbedProcessor.prototype._sanitizeHtml = function (unsanitizedHtml) {
+  var html;
+  if (typeof(unsanitizedHtml) === 'string') {
+    html = unsanitizedHtml;
+  } else {
+    html = unescape(this.$container.attr('instagram-embed-html-unsanitized'));
+    this.$container.attr('instagram-embed-html-unsanitized', '');
+  }
+
   return $(html).not('script').prop('outerHTML');
 };
 
@@ -51,25 +59,22 @@ InstagramEmbedProcessor.prototype.isRendered = function (val) {
 };
 
 InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
-  var html;
-  if (typeof(embedHtml) !== 'string') {
-    html = this.$container.attr('instagram-embed-html-unsanitized');
-    this.$container.attr('instagram-embed-html-unsanitized', '');
-  } else {
-    html = embedHtml;
-  }
-
-  var sanitized = this._sanitizeHtml(html);
+  var sanitized = this._sanitizeHtml(embedHtml);
   this.html(sanitized);
+};
+
+InstagramEmbedProcessor.prototype.insertUnrenderedHtml = function () {
+  this.$container.html(this.html());
 };
 
 InstagramEmbedProcessor.prototype.render = function () {
   var rendered;
 
   if (!this.isRendered()) {
+    this.insertUnrenderedHtml();
+
     var self = this;
     rendered = this._getInstagramEmbedScript().done(function () {
-      self.$container.html(self.html());
       instgrm.Embeds.process();
 
       self.$container.data('instagramEmbedRendered', true);
