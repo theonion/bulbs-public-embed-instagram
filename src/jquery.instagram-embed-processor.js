@@ -37,7 +37,7 @@ InstagramEmbedProcessor.prototype.getVersion = function () {
 };
 
 InstagramEmbedProcessor.prototype.isRendered = function (val) {
-  return this.$container.attr('instagram-embed-rendered') === true;
+  return this.$container.data('instagramEmbedRendered') === true;
 };
 
 InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
@@ -62,7 +62,8 @@ InstagramEmbedProcessor.prototype.render = function () {
       var code = this.attr('instagram-embed-html');
       this.html(unescape(code));
       instgrm.Embeds.process();
-      this.attr('instagram-embed-rendered', true);
+
+      this.data('instagramEmbedRendered', true);
     }.bind(this.$container));
   } else {
     rendered = this._getInstagramEmbedScript();
@@ -73,7 +74,7 @@ InstagramEmbedProcessor.prototype.render = function () {
 
 InstagramEmbedProcessor.prototype.clear = function () {
   this.$container.empty();
-  this.$container.attr('instagram-embed-rendered', true);
+  this.$container.data('instagramEmbedRendered', false);
 };
 
 var createInstagramEmbedProcessor = function (options) {
