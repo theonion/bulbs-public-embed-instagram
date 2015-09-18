@@ -25,7 +25,7 @@ InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
       });
   }
 
-  return this.shared.instagramLoaded;
+  return this.shared.instagramLoaded.promise();
 };
 
 InstagramEmbedProcessor.prototype.sanitizeHtml = function (html) {
@@ -47,16 +47,20 @@ InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
 };
 
 InstagramEmbedProcessor.prototype.render = function () {
+  var rendered;
 
   if (!this.isRendered()) {
-    this._getInstagramEmbedScript().done(function () {
+    rendered = this._getInstagramEmbedScript().done(function () {
       var code = this.attr('instagram-embed-html');
       this.html(unescape(code));
       instgrm.Embeds.process();
       this.attr('instagram-embed-rendered', true);
     }.bind(this.$container));
+  } else {
+    rendered = this._getInstagramEmbedScript();
   }
 
+  return rendered;
 };
 
 InstagramEmbedProcessor.prototype.clear = function () {
