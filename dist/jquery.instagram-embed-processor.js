@@ -5,15 +5,17 @@ var InstagramEmbedProcessor = function ($element, options) {
   }, options);
   this.$container = $element;
   this.$container.data('pluginInstagramEmbedProcessor', this);
+
+  this.$container.attr('instagram-processor-version', this._getVersion());
 };
 
-// store deferred for getting instagram object
-InstagramEmbedProcessor.prototype.shared = {instagramLoaded: null};
+// store deferred for getting instagram object, use same deferred accross all instances
+InstagramEmbedProcessor.prototype._shared = {instagramLoaded: null};
 
 InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
-  if (!this.shared.instagramLoaded || this.shared.instagramLoaded.state() === 'rejected') {
+  if (!this._shared.instagramLoaded || this._shared.instagramLoaded.state() === 'rejected') {
 
-    this.shared.instagramLoaded = $.Deferred();
+    this._shared.instagramLoaded = $.Deferred();
 
     var self = this;
     $.getScript(this._settings.instagramEmbedScriptUrl)
@@ -26,15 +28,23 @@ InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
       });
   }
 
-  return this.shared.instagramLoaded.promise();
+  return this._shared.instagramLoaded.promise();
 };
 
-InstagramEmbedProcessor.prototype.sanitizeHtml = function (html) {
+InstagramEmbedProcessor.prototype._sanitizeHtml = function (html) {
   return $(html).not('script').prop('outerHTML');
 };
 
-InstagramEmbedProcessor.prototype.getVersion = function () {
+InstagramEmbedProcessor.prototype._getVersion = function () {
   return '1.0.0';
+};
+
+InstagramEmbedProcessor.prototype.html = function (unescapedHtml) {
+  if (typeof(unescapedHtml) === 'string') {
+    this.$container.attr('instagram-embed-html', escape(unescapedHtml));
+  }
+
+  return unescape(this.$container.attr('instagram-embed-html'));
 };
 
 InstagramEmbedProcessor.prototype.isRendered = function (val) {
@@ -50,22 +60,21 @@ InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
     html = embedHtml;
   }
 
-  var sanitized = this.sanitizeHtml(html);
-  this.$container.attr('instagram-processor-version', this.getVersion());
-  this.$container.attr('instagram-embed-html', escape(sanitized));
+  var sanitized = this._sanitizeHtml(html);
+  this.html(sanitized);
 };
 
 InstagramEmbedProcessor.prototype.render = function () {
   var rendered;
 
   if (!this.isRendered()) {
+    var self = this;
     rendered = this._getInstagramEmbedScript().done(function () {
-      var code = this.attr('instagram-embed-html');
-      this.html(unescape(code));
+      self.$container.html(self.html());
       instgrm.Embeds.process();
 
-      this.data('instagramEmbedRendered', true);
-    }.bind(this.$container));
+      self.$container.data('instagramEmbedRendered', true);
+    });
   } else {
     rendered = this._getInstagramEmbedScript();
   }
