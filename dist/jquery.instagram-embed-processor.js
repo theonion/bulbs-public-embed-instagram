@@ -16,7 +16,7 @@ InstagramEmbedProcessor.prototype._getInstagramEmbedScript = function () {
     this.shared.instagramLoaded = $.Deferred();
 
     var self = this;
-    $.getScript(this._settings)
+    $.getScript(this._settings.instagramEmbedScriptUrl)
       .done(function () {
         self.shared.instagramLoaded.resolve();
       })
