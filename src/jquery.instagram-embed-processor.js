@@ -41,7 +41,15 @@ InstagramEmbedProcessor.prototype.isRendered = function (val) {
 };
 
 InstagramEmbedProcessor.prototype.prep = function (embedHtml) {
-  var sanitized = this.sanitizeHtml(embedHtml);
+  var html;
+  if (typeof(embedHtml) !== 'string') {
+    html = this.$container.attr('instagram-embed-html-unsanitized');
+    this.$container.attr('instagram-embed-html-unsanitized', '');
+  } else {
+    html = embedHtml;
+  }
+
+  var sanitized = this.sanitizeHtml(html);
   this.$container.attr('instagram-processor-version', this.getVersion());
   this.$container.attr('instagram-embed-html', escape(sanitized));
 };
