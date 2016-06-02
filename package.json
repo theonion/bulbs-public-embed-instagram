@@ -4,9 +4,7 @@
   "version": "0.0.9",
   "private": true,
   "scripts": {
-    "build-prepare": "rm -rf dist && mkdir dist",
-    "build-tasks": "browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js",
-    "build": "npm run build-prepare && npm run build-tasks"
+    "build": "browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js"
   },
   "devDependencies": {
     "browserify": "^11.1.0",
