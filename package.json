@@ -1,13 +1,28 @@
 {
   "description": "Do not install via npm.",
+  "name": "bulbs-public-embed-instagram",
+  "version": "0.0.9",
   "private": true,
   "scripts": {
-    "build-prepare": "rm -rf dist && mkdir dist",
-    "build-tasks": "./node_modules/.bin/browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js",
-    "build": "npm run build-prepare && npm run build-tasks"
+    "build": "browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js"
   },
   "devDependencies": {
     "browserify": "^11.1.0",
     "browserify-shim": "^3.8.10"
-  }
+  },
+  "main": "dist/jquery.instagram-embed-processor.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theonion/bulbs-public-embed-instagram.git"
+  },
+  "keywords": [
+    "jquery",
+    "instagram"
+  ],
+  "author": "webtech@theonion.com",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/theonion/bulbs-public-embed-instagram/issues"
+  },
+  "homepage": "https://github.com/theonion/bulbs-public-embed-instagram#readme"
 }
