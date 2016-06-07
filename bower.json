@@ -1,0 +1,13 @@
+{
+  "name": "bulbs-public-embed-instagram",
+  "version": "2.0.0",
+  "main": [
+    "jquery.instagram-embed-processor.js"
+  ],
+  "ignore": [
+    ".gitignore"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
