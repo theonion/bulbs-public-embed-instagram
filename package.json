@@ -1,7 +1,7 @@
 {
   "description": "Do not install via npm.",
   "name": "bulbs-public-embed-instagram",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "build": "browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js"
