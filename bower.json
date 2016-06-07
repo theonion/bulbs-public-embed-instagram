@@ -2,17 +2,12 @@
   "name": "bulbs-public-embed-instagram",
   "version": "0.0.9",
   "main": [
-    "dist/jquery.instagram-embed-processor.js"
+    "jquery.instagram-embed-processor.js"
   ],
   "ignore": [
-    ".gitignore",
-    "example",
-    "src",
-    "testing",
-    "README.md"
+    ".gitignore"
   ],
   "dependencies": {
     "jquery": "~2.1.1"
-  },
-  "devDependencies": {}
+  }
 }

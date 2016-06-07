@@ -1,16 +1,8 @@
 {
-  "description": "Do not install via npm.",
   "name": "bulbs-public-embed-instagram",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "build": "browserify src/jquery.instagram-embed-processor.js -o dist/jquery.instagram-embed-processor.js"
-  },
-  "devDependencies": {
-    "browserify": "^11.1.0",
-    "browserify-shim": "^3.8.10"
-  },
-  "main": "dist/jquery.instagram-embed-processor.js",
+  "main": "jquery.instagram-embed-processor.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/theonion/bulbs-public-embed-instagram.git"
