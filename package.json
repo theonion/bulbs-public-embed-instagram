@@ -1,6 +1,6 @@
 {
   "name": "bulbs-public-embed-instagram",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "main": "jquery.instagram-embed-processor.js",
   "repository": {
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/theonion/bulbs-public-embed-instagram/issues"
   },
-  "homepage": "https://github.com/theonion/bulbs-public-embed-instagram#readme"
+  "homepage": "https://github.com/theonion/bulbs-public-embed-instagram#readme",
+  "dependencies": {
+    "jquery": "^2.2.4"
+  }
 }
